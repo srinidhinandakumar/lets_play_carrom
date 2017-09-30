@@ -17,5 +17,7 @@ How to Play
 5. Once the pieces stop, again choose a position for your striker and continue the game.
 6. Game ends when both pieces are pocketed.
 
+## Play away!
+[logo]: https://github.com/srinidhinandakumar/lets_play_carrom/carrom.png "Carrom Board"
 
 
