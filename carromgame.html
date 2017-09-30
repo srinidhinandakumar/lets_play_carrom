@@ -1,0 +1,737 @@
+<DOCTYPE HTML>
+<html>
+	<head>
+		<title> Let's play Carrom </title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.js"></script>
+		
+		
+	</head>
+	<body style="margin:20px">
+			<center>
+			<canvas id="myCanvas" width="600" height="600" style="border:2px solid ">
+			</canvas>
+		</center>
+		<script>
+		//CSS
+			var p=document.getElementById("myCanvas");
+			var c1=p.getContext("2d");//striker
+			var c2=p.getContext("2d");//white
+			var c3=p.getContext("2d");//black
+			/*
+			function shapeLine(x1,y1,x2,y2)
+			{
+				c1.moveTo(x1,y1);
+				c1.lineTo(x2,y2);
+				c1.stroke():
+			}
+			*/
+			function shapeBox(x,y,h,w,fill)
+			{
+				
+				c1.moveTo(x,y);
+				c1.lineTo(x+w,y);
+				c1.stroke();//horizontal top
+				c1.moveTo(x+w,y+h);
+				c1.lineTo(x+w,y);
+				c1.stroke();//vertical right
+				c1.moveTo(x,y);
+				c1.lineTo(x,y+h);
+				c1.stroke();//vertical left
+				c1.moveTo(x,y+h);
+				c1.lineTo(x+h,y+h);//horizontal bottom
+				c1.stroke();
+				c1.fillStyle=fill;
+				c1.fill();
+			}
+			
+			function shapeBox1(x,y,h,w,fill)
+			{
+				c1.beginPath();
+				c1.rect(x,y,h,w);
+				c1.lineWidth=4;
+				c1.strokeStyle="#000000";
+				c1.fillStyle=fill;
+				c1.fill();
+				c1.stroke();
+			}
+			
+			function shapeCircle(context,x,y,r,startA,endA,fill)
+			{
+				context.beginPath();
+				context.arc(x,y,r,startA,endA);
+				context.stroke();
+				context.fillStyle=fill;
+				context.fill();
+			}
+			
+			function shapeLine(x1,y1,x2,y2)
+			{
+				c1.moveTo(x1,y1);
+				c1.lineTo(x2,y2);
+				c1.lineWidth=2;
+				c1.strokeStyle="#000000";
+				c1.stroke();
+			}
+			
+			function board()
+			{
+				shapeBox1(0,0,600,600,"#000000");//canvasOutermost black
+			
+				shapeBox1(20,20,560,560,"#DEB887");//canvas Ochre
+				
+				shapeCircle(c1,45,45,15,0,2*Math.PI,"#000000");//cornerPockets
+				shapeCircle(c1,45,555,15,0,2*Math.PI,"#000000");//cornerPockets
+				shapeCircle(c1,555,555,15,0,2*Math.PI,"#000000");//cornerPockets
+				shapeCircle(c1,555,45,15,0,2*Math.PI,"#000000");//cornerPockets
+				
+				shapeBox1(160,120,280,20,"#DEB887");//topInerRect
+				shapeBox1(120,160,20,280,"#DEB887");//leftInnerRect
+				shapeBox1(160,460,280,20,"#DEB887");//bottomInnerRect
+				shapeBox1(460,160,20,280,"#DEB887");//rightInnerRect
+				
+				shapeCircle(c1,155,130,10,0,2*Math.PI,"#FF0000");//cornerStrikerPosition
+				shapeCircle(c1,155,470,10,0,2*Math.PI,"#FF0000");//cornerStrikerPosition
+				shapeCircle(c1,445,130,10,0,2*Math.PI,"#FF0000");//cornerStrikerPosition
+				shapeCircle(c1,445,470,10,0,2*Math.PI,"#FF0000");//cornerStrikerPosition
+				shapeCircle(c1,130,155,10,0,2*Math.PI,"#FF0000");//cornerStrikerPosition
+				shapeCircle(c1,130,445,10,0,2*Math.PI,"#FF0000");//cornerStrikerPosition
+				shapeCircle(c1,470,155,10,0,2*Math.PI,"#FF0000");//cornerStrikerPosition
+				shapeCircle(c1,470,445,10,0,2*Math.PI,"#FF0000");//cornerStrikerPosition
+				
+				shapeCircle(c1,145,145,5,0,2*Math.PI,"#DEB887");//smallCircles
+				shapeCircle(c1,455,145,5,0,2*Math.PI,"#DEB887");//smallCircles
+				shapeCircle(c1,145,455,5,0,2*Math.PI,"#DEB887");//smallCircles
+				shapeCircle(c1,455,455,5,0,2*Math.PI,"#DEB887");//smallCircles
+				
+				shapeCircle(c1,385,215,13,1.9*Math.PI,1.6*Math.PI);//arctTopRight
+				shapeCircle(c1,215,215,13,1.4*Math.PI,1.1*Math.PI);//arcTopLeft
+				shapeCircle(c1,215,385,13,0.9*Math.PI,0.6*Math.PI);//arcBottomLeft
+				shapeCircle(c1,385,385,13,0.4*Math.PI,0.1*Math.PI);//arcBottomRight
+				
+				shapeCircle(c1,300,300,1,0,2*Math.PI);//to change arc thickness
+				
+				shapeLine(120,120,215,215);//diagonalTopLeft
+				shapeLine(480,480,385,385);//diagonalBottomRight
+				shapeLine(120,480,215,385);//diagonalBottomLeft
+				shapeLine(480,120,385,215);//diagonalTopRight
+							
+				shapeCircle(c1,300,300,55,0,2*Math.PI,"#000000");//centerCircle
+				shapeCircle(c1,300,300,54,0,2*Math.PI,"#DEB887");//centerCircle
+				shapeCircle(c1,300,300,47,0,2*Math.PI,"#FF0000");//centerCircle
+				shapeCircle(c1,300,300,40,0,2*Math.PI,"#DEB887");//centerCircle
+				shapeCircle(c1,300,300,35,0,2*Math.PI,"#DEB887");//centerCircle
+				shapeCircle(c1,300,300,32,0,2*Math.PI,"#DEB887");//centerCircle
+				
+				shapeCircle(c1,300,300,15,0,2*Math.PI,"#000000");//centerBlackCircle		
+				shapeCircle(c1,300,300,10,0,2*Math.PI,"#FF0000");//centerRedCircle
+				
+			}
+			board();
+			
+			function clearBoard()
+			{
+				c1.clearRect(0,0,600,600);
+				board();
+			}
+		//EVENTS
+			var interval;
+			var ball={};
+			ball={
+				x:155,
+				y:470,
+				radius: 12,
+				color: 'blue',
+				vx:2,
+				vy:2,
+				ax:-0.5,
+				ay:-0.5,
+				points:-10,
+				draw: function(){
+				
+					c1.beginPath();
+					c1.arc(this.x,this.y,this.radius,0,2*Math.PI,false);
+					c1.fillStyle=this.color;
+					c1.fill();
+					c1.closePath();
+				}
+				
+			};
+			var greenBall=[];
+			greenBall={
+				x:290,
+				y:300,
+				radius: 10,
+				color: 'green',
+				vx:2,
+				vy:2,
+				ax:-0.5,
+				ay:-0.5,
+				points:+10,
+				mass: 10,
+				draw: function(){
+				
+					c3.beginPath();
+					c3.arc(this.x,this.y,this.radius,0,2*Math.PI,false);
+					c3.fillStyle=this.color;
+					c3.fill();
+					c3.closePath();
+				}
+				
+			};
+			var yellowBall={};
+			yellowBall={
+				x:310,
+				y:300,
+				radius: 10,
+				color: 'yellow',
+				vx:2,
+				vy:2,
+				ax:-0.5,
+				ay:-0.5,
+				points:+10,
+				mass: 10,
+				draw: function(){
+				
+					c2.beginPath();
+					c2.arc(this.x,this.y,this.radius,0,2*Math.PI,false);
+					c2.fillStyle=this.color;
+					c2.fill();
+					c2.closePath();
+				}
+				
+			};
+			
+			function update(){
+			
+				clearBoard();
+				if(gFlag==0&&yFlag==0)
+							{
+								ball.draw();
+								greenBall.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==1&&yFlag==0)
+							{
+								ball.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==0&&yFlag==1)
+							{
+								ball.draw();
+								greenBall.draw();
+							}
+							else
+							{
+								alert("End Game");
+								location.reload(true);
+							}
+				
+				ball.y+=ball.vy;
+				ball.x+=ball.vx;
+				//ball.vy+=ball.ay;
+				//ball.vx+=ball.ax;
+				
+				if(ball.y+ball.radius>580)
+				{
+					ball.y=580-ball.radius;
+					ball.vy=-ball.vy;
+				}
+				if(ball.y-ball.radius<20)
+				{
+					ball.y=20+ball.radius;
+					ball.vy=-ball.vy;
+				}
+				if(ball.x+ball.radius>580)
+				{
+					ball.x=580-ball.radius;
+					ball.vx=-ball.vx;
+				}
+				if(ball.x-ball.radius<20)
+				{
+					ball.x=20+ball.radius;
+					ball.vx=-ball.vx;
+				}
+				
+			}
+			function updatePos(i)
+			{
+				if(i==0)
+				{
+					pathdraw1();
+				}
+				if(i==1)
+				{
+					pathdraw2();
+				}
+			}
+			
+			function calcCollision()
+			{
+				var collX = ((greenBall.x*yellowBall.radius)+(yellowBall.x*greenBall.radius))/(greenBall.radius+yellowBall.radius);
+				var collY = ((greenBall.y*yellowBall.radius)+(yellowBall.y*greenBall.radius))/(greenBall.radius+yellowBall.radius);
+				var newVelX1 = yellowBall.vx;
+				var newVelY1 = yellowBall.vy;
+				var newVelX2 = greenBall.vx;
+				var newVelY2 = greenBall.vx;
+				
+				yellowBall.vx=newVelX2;
+				yellowBall.vy=newVelY2;
+				
+				greenBall.vx=newVelX1;
+				greenBall.vy=newVelY1;
+			}
+			var pointsF=0,gFlag=0,yFlag=0;
+			function pathDraw()
+			{
+				
+				clearBoard();
+				if(gFlag==0&&yFlag==0)
+							{
+								ball.draw();
+								greenBall.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==1&&yFlag==0)
+							{
+								ball.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==0&&yFlag==1)
+							{
+								ball.draw();
+								greenBall.draw();
+							}
+							else
+							{
+								alert("End Game");
+								location.reload(true);
+							}
+				  
+			    if((ball.x-ball.radius)<20||(ball.x+ball.radius)>580) ball.vx=-ball.vx;
+			    if((ball.y-ball.radius)<20||(ball.y+ball.radius)>580) ball.vy=-ball.vy;
+			    ball.x+=ball.vx;
+			    ball.y+=ball.vy;
+				
+				if((ball.x<50&&ball.y<50)||(ball.x<50&&ball.y>550)||(ball.x>550&&ball.y<50)||(ball.x>550&&ball.y>550))
+				{
+					pointsF+=ball.points;
+					ball.x=300;
+					ball.y=470;
+					clearInterval(interval);
+					clearBoard();
+					ball.draw();
+					yellowBall.draw();
+					greenBall.draw();
+					console.log("Striker in hole! Points: "+pointsF);
+					flag=1;
+				}
+				//checking Overlap with green ball and striker
+				if((ball.x+ball.radius+greenBall.radius>greenBall.x)&&(ball.x<greenBall.x+ball.radius+greenBall.radius)&&(ball.y+ball.radius+greenBall.radius>greenBall.y)&&(ball.y<greenBall.y+ball.radius+greenBall.radius))
+						{
+							console.log("Striker Entered overlapp GREEN!!");
+							clearInterval(interval);
+							greenBall.vx=ball.vx;
+							greenBall.vy=ball.vy;
+							interval1=setInterval(pathDraw1,1000/60);
+							setTimeout(function(){
+								clearInterval(interval1);
+							},5000);
+						}
+				//checking overlap with yellow ball and striker
+				if((ball.x+ball.radius+yellowBall.radius>yellowBall.x)&&(ball.x<yellowBall.x+ball.radius+yellowBall.radius)&&(ball.y+ball.radius+yellowBall.radius>yellowBall.y)&&(ball.y<yellowBall.y+ball.radius+yellowBall.radius))
+						{
+							console.log("Striker Entered overlapp YELLOW!!");
+							clearInterval(interval);
+							yellowBall.vx=ball.vx;
+							yellowBall.vy=ball.vy;
+							interval2=setInterval(pathDraw2,1000/60);
+							setTimeout(function(){
+								clearInterval(interval2);
+							},5000);
+						}
+				//checking overlap between green ball and yellow ball
+				//if((greenBall.x+greenBall.radius+yellowBall.radius>yellowBall.x)&&(greenBall.x<yellowBall.x+greenBall.radius+yellowBall.radius)&&(greenBall.y+greenBall.radius+yellowBall.radius>yellowBall.y)&&(greenBall.y<yellowBall.y+greenBall.radius+yellowBall.radius))
+				{
+							/*console.log("Entered overlapp YELLOW!!");
+							clearInterval(interval);
+							yellowBall.vx=ball.vx;
+							yellowBall.vy=ball.vy;
+							interval1=setInterval(pathDraw2,1000/60);
+							setTimeout(function(){
+								clearInterval(interval1);
+							},5000);*/
+						/*	var xPow2=greenBall.x - yellowBall.x;
+							var yPow2=greenBall.y - yellowBall.y;
+							var distance = Math.sqrt(xPow2*xPow2+yPow2*yPow2);
+							if (distance < greenBall.radius + yellowBall.radius)
+							{	var i;
+								//balls have collided
+								for(i=0;i<2;i++)
+								{
+									updatePos(i);
+								}
+								
+								calcCollision(i);
+								console.log("Collision between Green and Yellow");
+								clearInterval(interval);
+								var interval3=setInterval(pathDraw1,1000/60);
+								var interval4=setInterval(pathDraw2,1000/60);
+								setTimeout(function(){
+								clearInterval(interval3);
+							},5000);
+							setTimeout(function(){
+								clearInterval(interval4);
+							},5000);
+						
+						
+								
+							}*/
+						}
+				
+			}
+			function pathDraw1()
+			{
+				
+				clearBoard();
+				if(gFlag==0&&yFlag==0)
+							{
+								ball.draw();
+								greenBall.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==1&&yFlag==0)
+							{
+								ball.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==0&&yFlag==1)
+							{
+								ball.draw();
+								greenBall.draw();
+							}
+							else
+							{
+								alert("End Game");
+								location.reload(true);
+							}
+				  
+			    if((greenBall.x-greenBall.radius)<20||(greenBall.x+greenBall.radius)>580) greenBall.vx=-greenBall.vx;
+			    if((greenBall.y-greenBall.radius)<20||(greenBall.y+greenBall.radius)>580) greenBall.vy=-greenBall.vy;
+			    greenBall.x+=greenBall.vx;
+			    greenBall.y+=greenBall.vy;
+				
+				if((greenBall.x<50&&greenBall.y<50)||(greenBall.x<50&&greenBall.y>550)||(greenBall.x>550&&greenBall.y<50)||(greenBall.x>550&&greenBall.y>550))
+				{
+					pointsF+=greenBall.points;
+					gFlag=1;
+					clearInterval(interval1);
+					
+					clearBoard();
+					if(yFlag==0)
+					{
+						ball.draw();
+						yellowBall.draw();
+						flag=1;
+					}
+					else
+					flag=3;
+					console.log("Green ball in hole! Points: "+pointsF);
+					
+				}
+				
+				if((greenBall.x+greenBall.radius+yellowBall.radius>yellowBall.x)&&(greenBall.x<yellowBall.x+greenBall.radius+yellowBall.radius)&&(greenBall.y+greenBall.radius+yellowBall.radius>yellowBall.y)&&(greenBall.y<yellowBall.y+greenBall.radius+yellowBall.radius))
+						{
+							if(yFlag==0)
+							{
+							console.log("Entered overlapp YELLOW!!");
+							clearInterval(interval1);
+							yellowBall.vx=greenBall.vx;
+							yellowBall.vy=greenBall.vy;
+							interval2=setInterval(pathDraw2,1000/60);
+							setTimeout(function(){
+								clearInterval(interval2);
+							},5000);
+							}
+						}
+				
+			}
+			function pathDraw2()
+			{
+				
+				clearBoard();
+				if(gFlag==0&&yFlag==0)
+							{
+								ball.draw();
+								greenBall.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==1&&yFlag==0)
+							{
+								ball.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==0&&yFlag==1)
+							{
+								ball.draw();
+								greenBall.draw();
+							}
+							else
+							{
+								alert("End Game");
+								location.reload(true);
+							}
+				  
+			    if((yellowBall.x-yellowBall.radius)<20||(yellowBall.x+yellowBall.radius)>580) yellowBall.vx=-yellowBall.vx;
+			    if((yellowBall.y-yellowBall.radius)<20||(yellowBall.y+yellowBall.radius)>580) yellowBall.vy=-yellowBall.vy;
+			    yellowBall.x+=yellowBall.vx;
+			    yellowBall.y+=yellowBall.vy;
+				
+				if((yellowBall.x<50&&yellowBall.y<50)||(yellowBall.x<50&&yellowBall.y>550)||(yellowBall.x>550&&yellowBall.y<50)||(yellowBall.x>550&&yellowBall.y>550))
+				{	
+					pointsF+=yellowBall.points;
+					yFlag=1;
+					console.log("Yellow ball in hole! Points: "+pointsF);
+					console.log("Test1");
+					clearInterval(interval2);
+					console.log("Test2+Flag:"+flag+"GFlag: "+gFlag);
+					clearBoard();
+					if(gFlag==0)
+					{
+						ball.draw();
+						flag=1;
+						greenBall.draw();
+					}
+					else if(gFlag==1)
+					{
+						//alert("End Game!");
+						flag=3;
+						ball.draw();
+						console.log("Test3+Flag:"+flag+" GFlag: "+gFlag);
+						//alert("End Game! Points: "+pointsF);
+					}
+					/*
+					pointsF+=yellowBall.points;
+					yFlag=1;
+					clearInterval(interval2);
+					
+					clearBoard();
+					if(gFlag==0)
+					{
+						ball.draw();
+						greenBall.draw();
+						flag=1;
+					}
+					else
+					flag=3;
+					console.log("Striker in hole! Points: "+pointsF);*/
+					
+				}
+				
+				if((yellowBall.x+yellowBall.radius+greenBall.radius>greenBall.x)&&(yellowBall.x<greenBall.x+yellowBall.radius+greenBall.radius)&&(yellowBall.y+yellowBall.radius+greenBall.radius>greenBall.y)&&(yellowBall.y<greenBall.y+yellowBall.radius+greenBall.radius))
+						{
+							if(gFlag==0){
+							console.log("Entered overlapp GREEN!!");
+							clearInterval(interval2);
+							greenBall.vx=yellowBall.vx;
+							greenBall.vy=yellowBall.vy;
+							interval1=setInterval(pathDraw1,1000/60);
+							setTimeout(function(){
+								clearInterval(interval1);
+							},5000);
+							}
+						}
+			}
+			
+			var flag=0,x2=0,y2=0;
+			
+			$(document).ready(function(e){
+			
+				$('#myCanvas').ready(function(e){
+				if(yFlag==1&&gFlag==0)
+					greenBall.draw();
+				if(yFlag==0&&gFlag==1)
+					yellowBall.draw();
+				if(yFlag==0&&gFlag==0)
+				{
+					greenBall.draw();
+					yellowBall.draw();
+				}
+				if(flag==3)
+				{
+					alert("End Game! Points: "+pointsF);
+					flag=4;
+					location.reload(true);
+				}
+				});
+				$('#myCanvas').mousedown(function(e)
+				{
+					var posX = $(this).offset().left, posY = $(this).offset().top;
+					var x1=e.pageX-posX;
+					var y1=e.pageY-posY;
+					console.log('MOUSE DOWN: X: '+x1+' Y:'+y1+' Flag:'+flag);
+					
+					if(flag==0){
+						
+						if(x1>=155&&x1<=455)
+						{
+							ball.x=x1;
+						}
+						else if(x1<155)
+						{
+							ball.x=155;
+						}
+						else if(x1>445)
+						{
+							ball.x=445;
+						}
+							
+							ball.y=470;
+							ball.vx=0;
+							ball.vy=0;
+							
+							update();
+							
+							flag=1;
+					}
+					else if(flag==1)
+					{	
+							if(x1>=155&&x1<=455)
+						{
+							ball.x=x1;
+						}
+						else if(x1<155)
+						{
+							ball.x=155;
+						}
+						else if(x1>445)
+						{
+							ball.x=445;
+						}
+							
+							ball.y=470;
+							ball.vx=0;
+							ball.vy=0;
+							
+							update();
+							x2=ball.x;
+							y2=ball.y;
+							flag=2;
+						
+					}
+					else if(flag==2)
+					{
+						ball.vy=(y1-y2)/100;
+						ball.vx=(x1-x2)/100;
+						interval=setInterval(pathDraw,1000/60);
+						/*setTimeout(function(){
+								clearInterval(interval);
+							},5000);*/
+						//if((Math.abs(ball.x-greenBall.x)<ball.radius+greenBall.radius)||(Math.abs(ball.y-greenBall.y)<ball.radius+greenBall.radius))
+						//console.log("Striker: X: "+ball.x+" Y: "+ball.y);
+						setTimeout(function(){
+								clearInterval(interval);
+							},5000);
+						
+						flag=0;
+					}
+					/*
+					if(flag==3)
+						{
+							alert("End Game!Points scored: "+pointsF);
+							flag=4;
+							
+						}*/
+				})
+				.mouseup(function(e){
+				
+					console.log("Mouse Up!");
+					
+					$('#myCanvas').mousemove(function(e){
+						
+						var posX = $(this).offset().left, posY = $(this).offset().top;
+						var x1=e.pageX-posX;
+						var y1=e.pageY-posY;
+						if(flag==1)
+						{
+							clearBoard();
+							if(x1>=155&&x1<=445){
+								ball.x=x1;								
+							}
+							else if(x1<155)
+							{
+								ball.x=155;
+							}
+							else if(x1>445)
+							{
+								ball.x=445;
+							}
+							ball.y=470;
+							ball.vx=0;
+							ball.vy=0;
+							
+							update();
+						}
+						
+						if(flag==2)
+						{
+							var mouseX=Math.abs(x1-x2);
+							var mouseY=Math.abs(y1-y2);
+							var distance=Math.sqrt(mouseX*mouseX+mouseY*mouseY);
+							//console.log(distance);
+							distance=(distance/10).toFixed(1);
+							clearBoard();
+							if(gFlag==0&&yFlag==0)
+							{
+								ball.draw();
+								greenBall.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==1&&yFlag==0)
+							{
+								ball.draw();
+								yellowBall.draw();
+							}
+							else if(gFlag==0&&yFlag==1)
+							{
+								ball.draw();
+								greenBall.draw();
+							}
+							else
+							{
+									ball.draw();
+									alert("End Game");
+									location.reload(true);
+							}
+							c1.fillStyle="#000000";
+							c1.fillRect(x1+10,y1+10,40,18);
+							c1.fillStyle="#0099f9";
+							c1.font="bold 12px veranda";
+							c1.fillText(distance,x1+20,y1+20,60);
+						}
+						
+						if(flag==3)
+						{
+						
+							alert("End Game!Points scored: "+pointsF);
+							flag=4;
+							location.reload(true);
+							
+						}
+						
+						//console.log('X: '+x1+' Y:'+y1)
+					});
+				
+				});
+			
+			});
+			
+			//interval=setInterval(update,1000/60);
+			//setTimeout(function(){
+				//clearInterval(interval);
+				//},5000);
+			
+			//shapeCircle(xPos,yPos,10,0,2*Math.PI,"#00ff00");
+		</script>
+		
+	</body>
+</html>
