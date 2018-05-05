@@ -18,6 +18,7 @@ How to Play
 6. Game ends when both pieces are pocketed.
 
 ## Play away!
+PLAY HERE : [https://srinidhinandakumar.github.io/lets-play-carrom/]
 ![Alt text](carrom.png?raw=true "Carrom Board")
 
 
